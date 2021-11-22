@@ -49,6 +49,7 @@ app.baseURL = '{url localhost yang diberikan spark}'
 4. buka terminal baru dan jalankan perintah
 
 ```
+cd {directori}
 php spark migrate
 ```
 
