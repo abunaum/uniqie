@@ -6,8 +6,9 @@
 2. `cd {directori}`
 3. `git clone https://github.com/abunaum/uniqie.git`
 4. `cd uniqie`
-5. `php spark serve`
-6. copy url localhost yang diberikan spark
+5. `composer install`
+6. `php spark serve`
+7. copy url localhost yang diberikan spark
 
 ## Konfigurasi
 
