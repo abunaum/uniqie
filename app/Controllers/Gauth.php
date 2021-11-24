@@ -65,7 +65,6 @@ class Gauth extends BaseController
             $ceklagi = $this->user->where('email', $email)->first();
             $newdata = [
                 'id'  => $ceklagi['id'],
-                'role' => $ceklagi['role'],
                 'logged_in' => true,
             ];
             session()->set($newdata);

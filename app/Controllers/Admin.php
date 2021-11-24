@@ -14,17 +14,6 @@ class Admin extends BaseController
         return view('admin/beranda', $data);
     }
 
-    public function item()
-    {
-        $item = $this->item->findAll();
-        $data = [
-            'judul' => 'Item',
-            'item' => $item,
-            'validation' => \Config\Services::validation()
-        ];
-        return view('admin/item', $data);
-    }
-
     public function payment()
     {
         $payment = $this->payment->where('id', 1)->first();
@@ -42,5 +31,25 @@ class Admin extends BaseController
             'validation' => \Config\Services::validation()
         ];
         return view('admin/payment', $data);
+    }
+
+    public function kategori()
+    {
+        $data = [
+            'judul' => 'Kategori',
+            'kategori' => kategori(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/kategori', $data);
+    }
+
+    public function produk()
+    {
+        $data = [
+            'judul' => 'Produk',
+            'produk' => produk(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/produk', $data);
     }
 }

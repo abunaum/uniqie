@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class User extends Model
+class Produk extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'users';
+    protected $table            = 'produk';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['oauth_id', 'name', 'profile', 'email', 'username', 'password_hash', 'status', 'role', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields    = ['kategori_id', 'nama', 'harga', 'gambar'];
 
     // Dates
     protected $useTimestamps = true;

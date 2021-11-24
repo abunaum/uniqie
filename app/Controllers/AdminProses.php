@@ -46,97 +46,61 @@ class AdminProses extends BaseController
         session()->destroy();
         return redirect()->to(base_url());
     }
-    public function tambah_item()
+    public function tambah_kategori()
     {
         $validasi = \Config\Services::validation();
         $nama = $this->request->getVar('nama');
-        $deskripsi = $this->request->getVar('deskripsi');
-        $harga = $this->request->getVar('harga');
-        $ambilkoma = '/,/i';
-        $harga = preg_replace($ambilkoma, '', $harga);
         if (!$this->validate(
             [
                 'nama' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'Nama item harus di isi.'
-                    ]
-                ],
-                'deskripsi' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'Deskripsi item harus di isi.'
-                    ]
-                ],
-                'harga' => [
-                    'rules' => 'required|min_length[6]',
-                    'errors' => [
-                        'required' => 'Harga item harus ada.',
-                        'min_length' => 'Harga minimal Rp. 10,000'
+                        'required' => 'Nama kategori harus di isi.'
                     ]
                 ]
             ]
         )) {
             session()->setFlashdata('error', [
-                'pesan' => 'Gagal menyimpan Item.',
+                'pesan' => 'Gagal menyimpan Kategori.',
                 'value' => $validasi->getErrors()
             ]);
-            return redirect()->to(base_url('admin/item'))->withInput();
+            return redirect()->to(base_url('admin/kategori'))->withInput();
         } else {
-            $item = $this->item;
-            $item->save([
-                'nama' => $nama,
-                'deskripsi' => $deskripsi,
-                'harga' => $harga
+            $kategori = $this->kategori;
+            $kategori->save([
+                'nama' => $nama
             ]);
             session()->setFlashdata('sukses', [
                 'pesan' => 'Mantap.',
-                'value' => 'Berhasil menyimpan Item.'
+                'value' => 'Berhasil menyimpan kategori.'
             ]);
-            session()->setFlashdata('websocket', 'edit_item');
-            return redirect()->to(base_url('admin/item'));
+            session()->setFlashdata('websocket', 'edit_kategori');
+            return redirect()->to(base_url('admin/kategori'));
         }
     }
-    public function hapus_item($id)
+    public function hapus_kategori($id)
     {
-        $item = $this->item;
-        $getitem = $item->where('id', $id)->first();
-        $nama = $getitem['nama'];
-        $item->where('id', $id)->delete();
+        $kategori = $this->kategori;
+        $getkategori = $kategori->where('id', $id)->first();
+        $nama = $getkategori['nama'];
+        $kategori->where('id', $id)->delete();
         session()->setFlashdata('sukses', [
             'pesan' => 'Mantap.',
             'value' => 'Berhasil menghapus ' . $nama
         ]);
-        session()->setFlashdata('websocket', 'edit_item');
-        return redirect()->to(base_url('admin/item'));
+        session()->setFlashdata('websocket', 'edit_kategori');
+        return redirect()->to(base_url('admin/kategori'));
     }
-    public function edit_item($id)
+    public function edit_kategori($id)
     {
-        $item = $this->item;
+        $kategori = $this->kategori;
         $nama = $this->request->getVar('nama');
-        $deskripsi = $this->request->getVar('deskripsi');
-        $harga = $this->request->getVar('harga');
-        $ambilkoma = '/,/i';
-        $harga = preg_replace($ambilkoma, '', $harga);
         if (!$this->validate(
             [
                 'nama' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'Nama item harus di isi.'
-                    ]
-                ],
-                'deskripsi' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'Deskripsi item harus di isi.'
-                    ]
-                ],
-                'harga' => [
-                    'rules' => 'required|min_length[6]',
-                    'errors' => [
-                        'required' => 'Harga item harus ada.',
-                        'min_length' => 'Harga minimal Rp. 10,000'
+                        'required' => 'Nama kategori harus di isi.'
                     ]
                 ]
             ]
@@ -146,20 +110,18 @@ class AdminProses extends BaseController
                 'pesan' => 'Gagal mengedit ' . $nama,
                 'value' => $validasi->getErrors()
             ]);
-            return redirect()->to(base_url('admin/item'))->withInput();
+            return redirect()->to(base_url('admin/kategori'))->withInput();
         } else {
-            $item->save([
+            $kategori->save([
                 'id' => $id,
-                'nama' => $nama,
-                'deskripsi' => $deskripsi,
-                'harga' => $harga
+                'nama' => $nama
             ]);
             session()->setFlashdata('sukses', [
                 'pesan' => 'Mantap.',
                 'value' => 'Berhasil mengedit ' . $nama
             ]);
-            session()->setFlashdata('websocket', 'edit_item');
-            return redirect()->to(base_url('admin/item'));
+            session()->setFlashdata('websocket', 'edit_kategori');
+            return redirect()->to(base_url('admin/kategori'));
         }
     }
     public function edit_payment()
@@ -229,6 +191,71 @@ class AdminProses extends BaseController
                 'value' => 'Berhasil mengedit payment gateway'
             ]);
             return redirect()->to(base_url('admin/payment'));
+        }
+    }
+
+    public function tambah_produk()
+    {
+        $validasi = \Config\Services::validation();
+        $nama = $this->request->getVar('nama');
+        $kategori = $this->request->getVar('kategori');
+        $harga = $this->request->getVar('harga');
+        $gambar = $this->request->getfile('gambar');
+        // dd($gambar);
+        $ambilkoma = '/,/i';
+        $harga = preg_replace($ambilkoma, '', $harga);
+        if (!$this->validate(
+            [
+                'nama' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama kategori harus di isi.'
+                    ]
+                ],
+                'kategori' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Kategori harus dipilih harus ada.'
+                    ]
+                ],
+                'harga' => [
+                    'rules' => 'required|min_length[6]',
+                    'errors' => [
+                        'required' => 'Harga Produk harus ada.',
+                        'min_length' => 'Harga minimal Rp. 10,000'
+                    ]
+                ],
+                'gambar' => [
+                    'rules' => 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/png,image/jpg,image/jpeg]',
+                    'errors' => [
+                        'uploaded' => 'Gambar harus ada.',
+                        'max_size' => 'Ukuran gambar maksimal 2MB',
+                        'is_image' => 'File yang dipilih harus gambar',
+                        'mime_in' => 'Gambar yang dipilih harus jpg/jpeg/png'
+                    ]
+                ]
+            ]
+        )) {
+            session()->setFlashdata('error', [
+                'pesan' => 'Gagal menyimpan produk.',
+                'value' => $validasi->getErrors()
+            ]);
+            return redirect()->to(base_url('admin/produk'))->withInput();
+        } else {
+            $gambar->move('images/produk');
+            $namagambar = $gambar->getName();
+            $produk = $this->produk;
+            $produk->save([
+                'nama' => $nama,
+                'kategori_id' => $kategori,
+                'harga' => $harga,
+                'gambar' => $namagambar
+            ]);
+            session()->setFlashdata('sukses', [
+                'pesan' => 'Mantap.',
+                'value' => 'Berhasil menyimpan produk.'
+            ]);
+            return redirect()->to(base_url('admin/produk'));
         }
     }
 }

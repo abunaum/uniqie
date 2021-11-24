@@ -45,11 +45,13 @@ $routes->group('admin', function ($routes) {
     $routes->get('/', 'Admin::index');
     $routes->get('payment', 'Admin::payment');
     $routes->post('edit_payment', 'AdminProses::edit_payment');
-    $routes->get('item', 'Admin::item');
-    $routes->post('tambah_item', 'AdminProses::tambah_item');
-    $routes->post('edit_item/(:num)', 'AdminProses::edit_item/$1');
-    $routes->delete('item/(:num)', 'AdminProses::hapus_item/$1');
+    $routes->get('kategori', 'Admin::kategori');
+    $routes->post('tambah_kategori', 'AdminProses::tambah_kategori');
+    $routes->post('edit_kategori/(:num)', 'AdminProses::edit_kategori/$1');
+    $routes->delete('kategori/(:num)', 'AdminProses::hapus_kategori/$1');
     $routes->post('uninstall', 'AdminProses::uninstall');
+    $routes->get('produk', 'Admin::produk');
+    $routes->post('tambah_produk', 'AdminProses::tambah_produk');
 });
 
 /*

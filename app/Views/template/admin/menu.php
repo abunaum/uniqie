@@ -16,7 +16,10 @@
         <i class="fas fa-fw fa-sitemap"></i>Item</a>
     <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
         <li>
-            <a href="<?= base_url('admin/item'); ?>">Item</a>
+            <a href="<?= base_url('admin/kategori'); ?>">Kategori</a>
+        </li>
+        <li>
+            <a href="<?= base_url('admin/produk'); ?>">Produk</a>
         </li>
     </ul>
 </li>

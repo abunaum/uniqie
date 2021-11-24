@@ -8,11 +8,12 @@
             <div class="col-xl-9">
                 <div class="shop-content text-center">
                     <p class="text-center" style="padding-bottom: 15px" ;><small class="text-muted" ;>Kategori unggulan logo kami</small></p>
-                    <a class="btn btn-primary" href="#" role="button">Minecraft</a>
-                    <a class="btn btn-primary" href="#" role="button">Gaming</a>
-                    <a class="btn btn-primary" href="#" role="button">eSport</a><br><br>
-                    <a class="btn btn-primary" href="#" role="button">Brandmu</a>
-                    <a class="btn btn-primary" href="#" role="button">Company</a>
+                    <?php if (kategori()) : ?>
+                        <?php $kategori = kategori() ?>
+                        <?php foreach ($kategori as $k) : ?>
+                            <a class="btn btn-primary" href="<?= base_url('kategori/' . $k['id']); ?>" role="button"><?= $k['nama']; ?></a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

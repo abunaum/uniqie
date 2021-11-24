@@ -25,7 +25,8 @@ class Admin implements FilterInterface
      */
     public function before(RequestInterface $request, $params = null)
     {
-        if (session()->get('role') != 1) {
+        helper('user');
+        if (role() != 1) {
             session()->setFlashdata('pesan', 'Silahkan login sebagai admin');
             return redirect()->to(base_url());
         }

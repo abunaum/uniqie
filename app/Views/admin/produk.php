@@ -11,32 +11,33 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Harga</th>
+                            <th>Kategori</th>
+                            <th>Gambar</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
-                        use Google\Service\AIPlatformNotebooks\Execution;
-
                         $nomor = 1 ?>
-                        <?php foreach ($item as $i) : ?>
+                        <?php foreach ($produk as $i) : ?>
                             <tr>
                                 <?php
                                 $nama = $i['nama'];
                                 $id = $i['id'];
                                 ?>
-                                <td><?= $nomor++ ?></td>
-                                <td><?= $nama ?></td>
-                                <td><?= 'Rp.' . number_format($i['harga']) ?></td>
-                                <td>
+                                <td style="text-align: center; vertical-align: middle;"><?= $nomor++ ?></td>
+                                <td style="text-align: center; vertical-align: middle;"><?= $i['nama']; ?></td>
+                                <td style="text-align: center; vertical-align: middle;"><?= $i['harga']; ?></td>
+                                <td style="text-align: center; vertical-align: middle;"><?= cekkategori($i['kategori_id']); ?></td>
+                                <td><img src="<?= base_url('images/produk/' . $i['gambar']); ?>" alt="" class="img-thumbnail" style="width: 10em;"></td>
+                                <td style="text-align: center; vertical-align: middle;">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editModal<?= $id; ?>">
                                         Edit
                                     </button>
-                                    <form action="<?= base_url('admin/item/' . $id) ?>" method="post" class="d-inline" id="form-hapus-id<?= $id; ?>">
+                                    <form action="<?= base_url('admin/produk/' . $id) ?>" method="post" class="d-inline" id="form-hapus-id<?= $id; ?>">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <button type="button" class="btn btn-danger" onclick="hapusitem('<?= $nama; ?>','<?= $id; ?>')">
+                                        <button type="button" class="btn btn-danger" onclick="hapusproduk('<?= $nama; ?>','<?= $id; ?>')">
                                             Hapus
                                         </button>
                                     </form>
@@ -48,14 +49,14 @@
             </div>
             <center>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
-                    Tambah Item
+                    Tambah Produk
                 </button>
             </center>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    function hapusitem(nama, id) {
+    function hapusproduk(nama, id) {
         Swal.fire({
             title: 'Yakin mau hapus ' + nama + id + ' ?',
             showCancelButton: true,
@@ -127,24 +128,31 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="tambahModalLabel">Tambah Item</h5>
+                <h5 class="modal-title" id="tambahModalLabel">Tambah Produk</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('admin/tambah_item') ?>" method="post">
+            <form action="<?= base_url('admin/tambah_produk') ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <div class="modal-body">
                     <div class="form-group has-success">
-                        <label for="nama" class="control-label mb-1">Nama Item</label>
+                        <label for="nama" class="control-label mb-1">Nama</label>
                         <input id="nama" name="nama" type="text" class="form-control <?= ($validation->hasError('nama') ? 'is-invalid' : ''); ?>" value="<?= old('nama'); ?>">
                     </div>
-                    <div class="form-group">
-                        <label for="deskripsi" class="control-label mb-1">Deskripsi Item</label>
-                        <textarea name="deskripsi" id="deskripsi" rows="9" placeholder="Masukkan deskripsi item" class="form-control <?= ($validation->hasError('deskripsi') ? 'is-invalid' : ''); ?>"><?= old('deskripsi'); ?></textarea>
+                    <?php
+                    $kategori = kategori();
+                    ?>
+                    <div class="form-group has-success">
+                        <label for="kategori" class="control-label mb-1">Kategori</label>
+                        <select class="form-control" id="kategori" name="kategori">
+                            <?php foreach ($kategori as $k) : ?>
+                                <option value="<?= $k['id']; ?>"><?= $k['nama']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class=" form-group">
-                        <label for="harga">Harga</label>
+                    <div class="form-group has-success">
+                        <label for="harga" class="control-label mb-1">Harga</label>
                         <div class="row form-group">
                             <div class="col col-md-12">
                                 <div class="input-group">
@@ -156,6 +164,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group has-success">
+                        <label for="gambar" class="form-gambar-label">Gambar</label>
+                        <input class="form-control <?= ($validation->hasError('gambar') ? 'is-invalid' : ''); ?>" type="file" id="gambar" name="gambar" onchange="previewgambar()">
+                    </div>
+                    <div class="form-group has-success">
+                        <img src="" class="img-thumbnail tampil-gambar">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
@@ -166,11 +181,9 @@
     </div>
 </div>
 
-<?php foreach ($item as $i) : ?>
+<?php foreach ($produk as $i) : ?>
     <?php
     $nama = $i['nama'];
-    $deskripsi = $i['deskripsi'];
-    $harga = $i['harga'];
     $id = $i['id'];
     ?>
     <div class="modal fade" id="editModal<?= $id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -182,29 +195,12 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="<?= base_url('admin/edit_item/' . $id) ?>" method="post">
+                <form action="<?= base_url('admin/edit_produk/' . $id) ?>" method="post">
                     <?= csrf_field(); ?>
                     <div class="modal-body">
                         <div class="form-group has-success">
-                            <label for="nama" class="control-label mb-1">Nama Item</label>
+                            <label for="nama" class="control-label mb-1">Nama Produk</label>
                             <input id="nama" name="nama" type="text" class="form-control <?= ($validation->hasError('nama') ? 'is-invalid' : ''); ?>" value="<?= (old('nama') ? old('nama') : $nama); ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="deskripsi" class="control-label mb-1">Deskripsi Item</label>
-                            <textarea name="deskripsi" id="deskripsi" rows="9" placeholder="Masukkan deskripsi item" class="form-control <?= ($validation->hasError('deskripsi') ? 'is-invalid' : ''); ?>"><?= (old('deskripsi') ? old('deskripsi') : $deskripsi); ?></textarea>
-                        </div>
-                        <div class=" form-group">
-                            <label for="harga">Harga</label>
-                            <div class="row form-group">
-                                <div class="col col-md-12">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            Rp.
-                                        </div>
-                                        <input type="text" id="harga" name="harga" onkeyup="convertToRupiah(this);" placeholder="10,000" class="form-control <?= ($validation->hasError('harga') ? 'is-invalid' : ''); ?>" value="<?= (old('harga') ? old('harga') : number_format($harga)); ?>">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -216,6 +212,18 @@
         </div>
     </div>
 <?php endforeach; ?>
+
+<script>
+    function previewgambar() {
+        const gambar = document.querySelector('#gambar');
+        const imgPreview = document.querySelector('.tampil-gambar');
+        const fileGambar = new FileReader();
+        fileGambar.readAsDataURL(gambar.files[0]);
+        fileGambar.onload = function(e) {
+            imgPreview.src = e.target.result;
+        }
+    }
+</script>
 
 <!-- /.container-fluid -->
 <?= $this->endSection(); ?>

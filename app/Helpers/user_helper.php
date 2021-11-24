@@ -19,3 +19,15 @@ function Gdata()
     $obj = (object) $data;
     return $obj;
 }
+
+function role()
+{
+    $id = session()->get('id');
+    if ($id != '') {
+        $user = new \App\Models\User();
+        $getuser = $user->asObject()->where('id', $id)->first();
+        return $getuser->role;
+    } else {
+        return 'belum login';
+    }
+}

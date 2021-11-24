@@ -50,6 +50,8 @@ class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
         $this->user = new \App\Models\User();
         $this->payment = new \App\Models\Payment();
-        helper('user');
+        $this->kategori = new \App\Models\Kategori();
+        $this->produk = new \App\Models\Produk();
+        helper(['user', 'kategori']);
     }
 }
