@@ -52,6 +52,6 @@ class BaseController extends Controller
         $this->payment = new \App\Models\Payment();
         $this->kategori = new \App\Models\Kategori();
         $this->produk = new \App\Models\Produk();
-        helper(['user', 'kategori']);
+        helper(['user', 'kategori', 'number']);
     }
 }

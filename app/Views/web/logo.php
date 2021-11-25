@@ -27,26 +27,31 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-10 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img class="card-img-top" src="images/uniqie.png" alt="..." />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder small">Skyblock Island</h5>
-                                <!-- Product price-->
-                                Rp10.000
+                <?php if (produk()) : ?>
+                    <?php $produk = produk() ?>
+                    <?php foreach ($produk as $p) : ?>
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="<?= base_url('images/produk/' . $p['gambar']); ?>" />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder small"><?= $p['nama']; ?></h5>
+                                        <!-- Product price-->
+                                        <?= number_to_currency($p['harga'], 'idr'); ?>
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer row justify-content-center p-4 pt-0 border-top-0 bg-transparent">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="<?= (session()->get('logged_in') != true ? '#loginModal' : '#orderModal'); ?>">Order
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <!-- Product actions-->
-                        <div class="card-footer row justify-content-center p-4 pt-0 border-top-0 bg-transparent">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="<?= (session()->get('logged_in') != true ? '#loginModal' : '#exampleModal'); ?>">Order
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -76,49 +81,51 @@
 </div>
 
 <!-- Modal Checkout Start-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img class="card-img-top" src="images/uniqie.png" alt="..." />
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="formGroupExampleInput" class="form-label">Nama Logo *</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="contoh: uniqie">
+<?php if (ceklogin() == true) : ?>
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img class="card-img-top" src="images/uniqie.png" alt="..." />
                 </div>
-                <div class="mb-3">
-                    <label for="formGroupExampleInput2" class="form-label">Email *</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="email@email.com">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput" class="form-label">Nama Logo *</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="contoh: uniqie">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Email *</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="email@email.com" value="<?= user()->email; ?>">
+                    </div>
+                    <label for="formGroupExampleInput2" class="form-label">Pembayaran</label>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Bank BCA (VA)</option>
+                        <option value="1">Bank BRI (VA)</option>
+                        <option value="2">Bank BNI (VA)</option>
+                        <option value="3">Bank Mandiri (VA)</option>
+                        <option value="4">Alfamart</option>
+                        <option value="5">Alfamidi</option>
+                        <option value="6">Indomaret</option>
+                        <option value="7">OVO (Cash/Point)</option>
+                        <option value="8">QRIS</option>
+                    </select>
                 </div>
-                <label for="formGroupExampleInput2" class="form-label">Pembayaran</label>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Bank BCA (VA)</option>
-                    <option value="1">Bank BRI (VA)</option>
-                    <option value="2">Bank BNI (VA)</option>
-                    <option value="3">Bank Mandiri (VA)</option>
-                    <option value="4">Alfamart</option>
-                    <option value="5">Alfamidi</option>
-                    <option value="6">Indomaret</option>
-                    <option value="7">OVO (Cash/Point)</option>
-                    <option value="8">QRIS</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Checkout</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-target="#orderModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Checkout</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
 <!-- Modal Checkout End-->
 
 <!-- Modal Confirm Start-->
-<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+<div class="modal fade" id="orderModalToggle2" aria-hidden="true" aria-labelledby="orderModalToggleLabel2" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel2">Konfirmasi pesanan anda</h5>
+                <h5 class="modal-title" id="orderModalToggleLabel2">Konfirmasi pesanan anda</h5>
             </div>
             <div class="modal-body">
                 <label for="formGroupExampleInput" class="form-label">Nama Logo *</label>
@@ -148,7 +155,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Konfirmasi</button>
+                <button type="button" class="btn btn-primary" data-bs-target="#orderModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Konfirmasi</button>
             </div>
         </div>
     </div>
@@ -156,11 +163,11 @@
 <!-- Modal Confirm End-->
 
 <!-- Modal Payment Start -->
-<div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabindex="-1">
+<div class="modal fade" id="orderModalToggle3" aria-hidden="true" aria-labelledby="orderModalToggleLabel3" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel3">Pembayaran</h5>
+                <h5 class="modal-title" id="orderModalToggleLabel3">Pembayaran</h5>
             </div>
             <div class="modal-body">
                 <table class="table table-sm">
@@ -189,7 +196,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
-                <button type="button" class="btn btn-success" data-bs-target="#exampleModalToggle4" data-bs-toggle="modal" data-bs-dismiss="modal">Cara Pembayaran</button>
+                <button type="button" class="btn btn-success" data-bs-target="#orderModalToggle4" data-bs-toggle="modal" data-bs-dismiss="modal">Cara Pembayaran</button>
             </div>
         </div>
     </div>
@@ -197,11 +204,11 @@
 <!-- Modal Payment End-->
 
 <!-- Modal Tutorial Start -->
-<div class="modal fade" id="exampleModalToggle4" aria-hidden="true" aria-labelledby="exampleModalToggleLabel4" tabindex="-1">
+<div class="modal fade" id="orderModalToggle4" aria-hidden="true" aria-labelledby="orderModalToggleLabel4" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="exampleModalToggleLabel4">Petunjuk Pembayaran</h6>
+                <h6 class="modal-title" id="orderModalToggleLabel4">Petunjuk Pembayaran</h6>
             </div>
             <div class="modal-body">
                 <div class="alert alert-primary" role="alert">
@@ -227,7 +234,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Kembali</button>
+                <button type="button" class="btn btn-primary" data-bs-target="#orderModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Kembali</button>
             </div>
         </div>
     </div>

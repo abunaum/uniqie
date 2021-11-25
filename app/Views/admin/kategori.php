@@ -50,74 +50,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function hapuskategori(nama, id) {
-        Swal.fire({
-            title: 'Yakin mau hapus ' + nama + id + ' ?',
-            showCancelButton: true,
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal',
-            showLoaderOnConfirm: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById("form-hapus-id" + id).submit();
-            }
-        })
-    }
-</script>
-<?php if (session()->getFlashdata('error')) : ?>
-    <?php
-    $error = session()->getFlashdata('error');
-    $pesan = $error['pesan'];
-    $value = $error['value'];
-    $keterangan = implode("<br>[x] ", $value);
-    ?>
-    <script type="text/javascript">
-        var pesan = '<?= $pesan ?>';
-        var error = '<?= $keterangan ?>';
-        Swal.fire({
-            title: pesan,
-            html: '[x]' + error,
-            icon: 'error',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Coba lagi ?'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#tambahModal').modal('show');
-            }
-        })
-    </script>
-<?php endif; ?>
-
-<?php if (session()->getFlashdata('sukses')) : ?>
-    <?php
-    $flash = session()->getFlashdata('sukses');
-    $pesan = $flash['pesan'];
-    $value = $flash['value'];
-    ?>
-    <script type="text/javascript">
-        var pesan = '<?= $pesan ?>';
-        var value = '<?= $value ?>';
-        let timerInterval
-        Swal.fire({
-            icon: 'success',
-            title: pesan,
-            html: value,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: () => {
-                Swal.showLoading()
-                timerInterval = setInterval(() => 100)
-            },
-            willClose: () => {
-                clearInterval(timerInterval)
-            }
-        }).then((result) => {
-            if (result.dismiss === Swal.DismissReason.timer) {}
-        })
-    </script>
-<?php endif; ?>
 
 <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -169,13 +101,94 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="submit" class="btn btn-success">Edit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 <?php endforeach; ?>
+
+<script type="text/javascript">
+    function hapuskategori(nama, id) {
+        Swal.fire({
+            title: 'Yakin mau hapus ' + nama + id + ' ?',
+            showCancelButton: true,
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            showLoaderOnConfirm: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("form-hapus-id" + id).submit();
+            }
+        })
+    }
+</script>
+<?php if (session()->getFlashdata('error')) : ?>
+    <?php
+    $error = session()->getFlashdata('error');
+    $pesan = $error['pesan'];
+    $type = $error['type'];
+    if ($type == 'edit') {
+        $edit_id = $error['id'];
+    } else {
+        $edit_id = 0;
+    }
+    $value = $error['value'];
+    $keterangan = implode("<br>[x] ", $value);
+    ?>
+    <script type="text/javascript">
+        var pesan = '<?= $pesan ?>';
+        var error = '<?= $keterangan ?>';
+        var tipe = '<?= $type ?>';
+        var id = '<?= $edit_id ?>';
+        Swal.fire({
+            title: pesan,
+            html: '[x]' + error,
+            icon: 'error',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Coba lagi ?'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (tipe == 'tambah') {
+                    $('#tambahModal').modal('show');
+                } else {
+                    $('#editModal' + id).modal('show');
+                }
+            }
+        })
+    </script>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('sukses')) : ?>
+    <?php
+    $flash = session()->getFlashdata('sukses');
+    $pesan = $flash['pesan'];
+    $value = $flash['value'];
+    ?>
+    <script type="text/javascript">
+        var pesan = '<?= $pesan ?>';
+        var value = '<?= $value ?>';
+        let timerInterval
+        Swal.fire({
+            icon: 'success',
+            title: pesan,
+            html: value,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => 100)
+            },
+            willClose: () => {
+                clearInterval(timerInterval)
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {}
+        })
+    </script>
+<?php endif; ?>
 
 <!-- /.container-fluid -->
 <?= $this->endSection(); ?>

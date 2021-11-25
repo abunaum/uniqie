@@ -62,6 +62,7 @@ class AdminProses extends BaseController
         )) {
             session()->setFlashdata('error', [
                 'pesan' => 'Gagal menyimpan Kategori.',
+                'type' => 'tambah',
                 'value' => $validasi->getErrors()
             ]);
             return redirect()->to(base_url('admin/kategori'))->withInput();
@@ -94,6 +95,8 @@ class AdminProses extends BaseController
     public function edit_kategori($id)
     {
         $kategori = $this->kategori;
+        $detailkategori = $kategori->where('id', $id)->first();
+        $namalama = $detailkategori['nama'];
         $nama = $this->request->getVar('nama');
         if (!$this->validate(
             [
@@ -108,6 +111,8 @@ class AdminProses extends BaseController
             $validasi = \Config\Services::validation();
             session()->setFlashdata('error', [
                 'pesan' => 'Gagal mengedit ' . $nama,
+                'type' => 'edit',
+                'id' => $id,
                 'value' => $validasi->getErrors()
             ]);
             return redirect()->to(base_url('admin/kategori'))->withInput();
@@ -118,7 +123,7 @@ class AdminProses extends BaseController
             ]);
             session()->setFlashdata('sukses', [
                 'pesan' => 'Mantap.',
-                'value' => 'Berhasil mengedit ' . $nama
+                'value' => 'Berhasil mengedit <b>' . $namalama . '</b> menjadi <b>' . $nama . '</b>'
             ]);
             session()->setFlashdata('websocket', 'edit_kategori');
             return redirect()->to(base_url('admin/kategori'));
@@ -201,7 +206,6 @@ class AdminProses extends BaseController
         $kategori = $this->request->getVar('kategori');
         $harga = $this->request->getVar('harga');
         $gambar = $this->request->getfile('gambar');
-        // dd($gambar);
         $ambilkoma = '/,/i';
         $harga = preg_replace($ambilkoma, '', $harga);
         if (!$this->validate(
@@ -219,10 +223,9 @@ class AdminProses extends BaseController
                     ]
                 ],
                 'harga' => [
-                    'rules' => 'required|min_length[6]',
+                    'rules' => 'required',
                     'errors' => [
-                        'required' => 'Harga Produk harus ada.',
-                        'min_length' => 'Harga minimal Rp. 10,000'
+                        'required' => 'Harga Produk harus ada.'
                     ]
                 ],
                 'gambar' => [
@@ -238,10 +241,20 @@ class AdminProses extends BaseController
         )) {
             session()->setFlashdata('error', [
                 'pesan' => 'Gagal menyimpan produk.',
+                'type' => 'tambah',
                 'value' => $validasi->getErrors()
             ]);
             return redirect()->to(base_url('admin/produk'))->withInput();
         } else {
+            if ($harga < 20000) {
+                session()->setFlashdata('error', [
+                    'pesan' => 'Gagal menyimpan produk.',
+                    'type' => 'tambah',
+                    'value' => ['harga' => 'Harga minimal Rp 20.000']
+                ]);
+                session()->setFlashdata('hargaerror', 'Harga minimal Rp 20.000');
+                return redirect()->to(base_url('admin/produk'))->withInput();
+            }
             $gambar->move('images/produk');
             $namagambar = $gambar->getName();
             $produk = $this->produk;
@@ -257,5 +270,101 @@ class AdminProses extends BaseController
             ]);
             return redirect()->to(base_url('admin/produk'));
         }
+    }
+
+    public function edit_produk($id)
+    {
+        $nama = $this->request->getVar('nama');
+        $kategori = $this->request->getVar('kategori');
+        $harga = $this->request->getVar('harga');
+        $gambar = $this->request->getfile('gambar');
+        $ambilkoma = '/,/i';
+        $harga = preg_replace($ambilkoma, '', $harga);
+        if (!$this->validate(
+            [
+                'nama' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nama kategori harus di isi.'
+                    ]
+                ],
+                'kategori' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Kategori harus dipilih harus ada.'
+                    ]
+                ],
+                'harga' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Harga Produk harus ada.'
+                    ]
+                ],
+                'gambar' => [
+                    'rules' => 'max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/png,image/jpg,image/jpeg]',
+                    'errors' => [
+                        'max_size' => 'Ukuran gambar maksimal 2MB',
+                        'is_image' => 'File yang dipilih harus gambar',
+                        'mime_in' => 'Gambar yang dipilih harus jpg/jpeg/png'
+                    ]
+                ]
+            ]
+        )) {
+            $validasi = \Config\Services::validation();
+            session()->setFlashdata('error', [
+                'pesan' => 'Gagal mengedit ' . $nama,
+                'type' => 'edit',
+                'id' => $id,
+                'value' => $validasi->getErrors()
+            ]);
+            return redirect()->to(base_url('admin/produk'))->withInput();
+        } else {
+            if ($harga < 20000) {
+                session()->setFlashdata('error', [
+                    'pesan' => 'Gagal menyimpan produk.',
+                    'type' => 'edit',
+                    'id' => $id,
+                    'value' => ['harga' => 'Harga minimal Rp 20.000']
+                ]);
+                session()->setFlashdata('hargaerror', 'Harga minimal Rp 20.000');
+                return redirect()->to(base_url('admin/produk'))->withInput();
+            }
+            $cekproduk = $this->produk->where('id', $id)->first();
+            if ($gambar->getError() == 4) {
+                $namagambar = $cekproduk['gambar'];
+            } else {
+                unlink('images/produk/' . $cekproduk['gambar']);
+                $gambar->move('images/produk');
+                $namagambar = $gambar->getName();
+            }
+            $produk = $this->produk;
+            $produk->save([
+                'id' => $id,
+                'nama' => $nama,
+                'kategori_id' => $kategori,
+                'harga' => $harga,
+                'gambar' => $namagambar
+            ]);
+            session()->setFlashdata('sukses', [
+                'pesan' => 'Mantap.',
+                'value' => 'Berhasil mengedit ' . $nama
+            ]);
+            return redirect()->to(base_url('admin/produk'));
+        }
+    }
+
+    public function hapus_produk($id)
+    {
+        $produk = $this->produk;
+        $getproduk = $produk->where('id', $id)->first();
+        $nama = $getproduk['nama'];
+        $gambar = $getproduk['gambar'];
+        unlink('images/produk/' . $gambar);
+        $produk->where('id', $id)->delete();
+        session()->setFlashdata('sukses', [
+            'pesan' => 'Mantap.',
+            'value' => 'Berhasil menghapus ' . $nama
+        ]);
+        return redirect()->to(base_url('admin/produk'));
     }
 }

@@ -31,3 +31,12 @@ function role()
         return 'belum login';
     }
 }
+
+function ceklogin()
+{
+    if (!session()->get('logged_in')) {
+        return false;
+    } else {
+        return true;
+    }
+}

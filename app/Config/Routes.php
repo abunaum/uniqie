@@ -52,6 +52,8 @@ $routes->group('admin', function ($routes) {
     $routes->post('uninstall', 'AdminProses::uninstall');
     $routes->get('produk', 'Admin::produk');
     $routes->post('tambah_produk', 'AdminProses::tambah_produk');
+    $routes->post('edit_produk/(:num)', 'AdminProses::edit_produk/$1');
+    $routes->delete('produk/(:num)', 'AdminProses::hapus_produk/$1');
 });
 
 /*
