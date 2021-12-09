@@ -17,7 +17,9 @@
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
 
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" media="all">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" media="all"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" media="all">
+
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/wow/animate.css" rel="stylesheet" media="all">
@@ -28,7 +30,7 @@
 
     <!-- Main CSS-->
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/css/theme.css" rel="stylesheet" media="all">
-    <link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
+    <link href="<?= base_url('images/favicon.png'); ?>" rel="icon">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
 </head>
@@ -83,8 +85,10 @@
     <!-- Jquery JS-->
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
     <!-- Vendor JS       -->
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/vendor/slick/slick.min.js">
     </script>
@@ -106,32 +110,6 @@
     <!-- Extra JS Gua-->
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="<?= base_url('js/currency.js') ?>"></script>
-    <script>
-        var conn = new WebSocket('ws://localhost:5051');
-        conn.onopen = function(e) {
-            console.log("Connection established!");
-        };
-
-        conn.onmessage = function(e) {
-            console.log(e.data);
-        };
-    </script>
-    <?php
-    if (session()->getFlashdata('websocket')) :
-        $data = session()->getFlashdata('websocket');
-    ?>
-        <script>
-            var conn = new WebSocket('ws://localhost:5051');
-            conn.onopen = function(e) {
-                conn.send('<?= $data; ?>');
-            };
-
-            conn.onmessage = function(e) {
-                console.log(e.data);
-            };
-        </script>
-    <?php endif; ?>
-
 </body>
 
 </html>

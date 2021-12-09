@@ -9,6 +9,9 @@
         <li>
             <a href="<?= base_url('admin/payment'); ?>">Payment Gateway</a>
         </li>
+        <li>
+            <a href="<?= base_url('admin/channel'); ?>">Channel Pembayaran</a>
+        </li>
     </ul>
 </li>
 <li class="has-sub">

@@ -48,8 +48,10 @@ class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+        $this->db      = \Config\Database::connect();
         $this->user = new \App\Models\User();
         $this->payment = new \App\Models\Payment();
+        $this->channel = new \App\Models\Channel();
         $this->kategori = new \App\Models\Kategori();
         $this->produk = new \App\Models\Produk();
         helper(['user', 'kategori', 'number']);

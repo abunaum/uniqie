@@ -43,17 +43,27 @@ $routes->get('logout', 'Gauth::logout');
 
 $routes->group('admin', function ($routes) {
     $routes->get('/', 'Admin::index');
+
     $routes->get('payment', 'Admin::payment');
     $routes->post('edit_payment', 'AdminProses::edit_payment');
+    $routes->get('channel', 'Admin::channel');
+
     $routes->get('kategori', 'Admin::kategori');
     $routes->post('tambah_kategori', 'AdminProses::tambah_kategori');
     $routes->post('edit_kategori/(:num)', 'AdminProses::edit_kategori/$1');
     $routes->delete('kategori/(:num)', 'AdminProses::hapus_kategori/$1');
+
     $routes->post('uninstall', 'AdminProses::uninstall');
+
     $routes->get('produk', 'Admin::produk');
     $routes->post('tambah_produk', 'AdminProses::tambah_produk');
     $routes->post('edit_produk/(:num)', 'AdminProses::edit_produk/$1');
     $routes->delete('produk/(:num)', 'AdminProses::hapus_produk/$1');
+});
+
+$routes->group('api', function ($routes) {
+    $routes->post('cekapipayment', 'Api::api');
+    $routes->post('syncchannel', 'Api::syncchannel');
 });
 
 /*

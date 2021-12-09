@@ -33,6 +33,19 @@ class Admin extends BaseController
         return view('admin/payment', $data);
     }
 
+    public function channel()
+    {
+        $payment = $this->payment->where('id', 1)->first();
+        $channel = $this->channel->findAll();
+        $data = [
+            'judul' => 'Channel Pembayaran',
+            'payment' => $payment,
+            'channel' => $channel,
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/channel', $data);
+    }
+
     public function kategori()
     {
         $data = [

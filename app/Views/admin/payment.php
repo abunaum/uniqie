@@ -4,7 +4,7 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
-            <form action="<?= base_url('admin/edit_payment') ?>" method="post">
+            <form action="<?= base_url('admin/edit_payment') ?>" method="post" id="editpayment">
                 <?= csrf_field(); ?>
                 <div class="modal-body">
                     <div class="form-group has-success">
@@ -34,13 +34,77 @@
                 </div>
                 <center>
                     <div>
-                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-success" onclick="cekpayment()" id="cekpay">Simpan</button>
                     </div>
                 </center>
             </form>
         </div>
     </div>
 </div>
+<script>
+    function cekpayment() {
+        api = document.getElementById('apikey').value;
+        if (api == '') {
+            Swal.fire({
+                title: "Error!",
+                html: "API key masih kosong",
+                icon: 'error',
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+                    timerInterval = setInterval(() => 100)
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {}
+            })
+            return;
+        }
+        jenis = document.getElementById('jenis').value;
+        $("#cekpay").text("Cek Api Key ...");
+        $('#cekpay').attr('disabled', 'disabled');
+
+        var settings = {
+            "url": "<?= base_url('api/cekapipayment'); ?>",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            "data": {
+                "apikey": api,
+                "jenis": jenis
+            }
+        };
+        $.ajax(settings).done(function(response) {
+            if (response['success'] == true) {
+                $("#editpayment").submit();
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    html: response['message'],
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        timerInterval = setInterval(() => 100)
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval)
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {}
+                })
+            }
+            $('#cekpay').removeAttr('disabled');
+            $("#cekpay").text("Simpan");
+        });
+    }
+</script>
 <?php if (session()->getFlashdata('error')) : ?>
     <?php
     $error = session()->getFlashdata('error');
