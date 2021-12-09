@@ -65,7 +65,7 @@
                                     <td><?= $nama ?></td>
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" <?= ($status == 'aktif' ? 'checked' : ''); ?> role="switch" id="status<?= $id; ?>">
+                                            <input class="form-check-input" type="checkbox" <?= ($status == 'aktif' ? 'checked' : ''); ?> role="switch" id="status<?= $id; ?>" onclick="onoff('<?= $id; ?>')">
                                         </div>
                                     </td>
                                 </tr>
@@ -135,6 +135,77 @@
                         willClose: () => {
                             clearInterval(timerInterval)
                             window.location.href = "<?= base_url('admin/channel'); ?>";
+                        }
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {}
+                    })
+                }
+            });
+    }
+</script>
+<script>
+    function onoff(idnya) {
+        Swal.fire({
+            html: "<p id='onoffload'>Mengubah status ....</p>",
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading()
+            },
+            willClose: () => {}
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {}
+        })
+
+        var header = new Headers();
+        header.append("Content-Type", "application/x-www-form-urlencoded");
+
+        var data = new URLSearchParams();
+        data.append("id", idnya);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: header,
+            body: data,
+            mode: "cors",
+            redirect: 'follow'
+        };
+        url = '<?= base_url('api/onoffchannel'); ?>';
+        fetch(url, requestOptions)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                if (jsonResponse['success'] != true) {
+                    Swal.fire({
+                        title: 'Status channel',
+                        html: jsonResponse['pesan'],
+                        icon: 'error',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            timerInterval = setInterval(() => 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                            window.location.href = "<?= base_url('admin/channel'); ?>";
+                        }
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {}
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Status channel',
+                        html: jsonResponse['pesan'],
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            timerInterval = setInterval(() => 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
                         }
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {}

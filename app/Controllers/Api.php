@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\API\ResponseTrait;
 
 class Api extends BaseController
 {
@@ -100,6 +99,39 @@ class Api extends BaseController
         }
 
         return $this->response->setJSON($kirim);
-        // return print_r($arr);
+    }
+
+    public function onoffchannel()
+    {
+        $id = $this->request->getVar('id');
+        $channel = $this->channel->where('id', $id)->first();
+        $status = $channel['status'];
+        $namachannel = $channel['nama'];
+        $this->db->transStart();
+        if ($status == 'aktif') {
+            $newstatus = 'nonaktif';
+        } else {
+            $newstatus = 'aktif';
+        }
+
+        $savechannel = new $this->channel;
+        $savechannel->save([
+            'id' => $id,
+            'status' => $newstatus
+        ]);
+        $this->db->transComplete();
+        if ($this->db->transStatus() === false) {
+            $kirim = array(
+                'success' => false,
+                'pesan' => "Gagal mengubah $namachannel  menjadi  $newstatus"
+            );
+        } else {
+            $kirim = array(
+                'success' => true,
+                'pesan' => "Berhasil mengubah $namachannel menjadi $newstatus"
+            );
+        }
+
+        return $this->response->setJSON($kirim);
     }
 }

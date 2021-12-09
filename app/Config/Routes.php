@@ -64,6 +64,7 @@ $routes->group('admin', function ($routes) {
 $routes->group('api', function ($routes) {
     $routes->post('cekapipayment', 'Api::api');
     $routes->post('syncchannel', 'Api::syncchannel');
+    $routes->post('onoffchannel', 'Api::onoffchannel');
 });
 
 /*
