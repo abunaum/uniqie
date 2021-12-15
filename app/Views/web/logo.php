@@ -45,7 +45,7 @@
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer row justify-content-center p-4 pt-0 border-top-0 bg-transparent">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="<?= (session()->get('logged_in') != true ? '#loginModal' : '#orderModal'); ?>">Order
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="<?= (session()->get('logged_in') != true ? '#loginModal' : '#orderModal' . $p['id']); ?>">Order
                                     </button>
                                 </div>
                             </div>
@@ -82,41 +82,52 @@
 
 <!-- Modal Checkout Start-->
 <?php if (ceklogin() == true) : ?>
-    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <img class="card-img-top" src="images/uniqie.png" alt="..." />
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput" class="form-label">Nama Logo *</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="contoh: uniqie">
+    <?php if (produk()) : ?>
+        <?php $produk = produk() ?>
+        <?php foreach ($produk as $p) : ?>
+            <div class="modal fade" id="orderModal<?= $p['id']; ?>" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <center>
+                                <img class="img-thumbnail img-responsive" style="max-width:50%;" src="<?= base_url('images/produk/' . $p['gambar']); ?>" />
+                            </center>
+                        </div>
+                        <div class="modal-body">
+                            <form action="<?= base_url('checkout'); ?>" method="post">
+                                <input type="hidden" class="form-control" id="id" name="id" value="<?= $p['id']; ?>">
+                                <div class="mb-3">
+                                    <label for="nama" class="form-label">Nama Logo *</label>
+                                    <input type="text" class="form-control <?= ($validation->hasError('nama') ? 'is-invalid' : ''); ?>" value="<?= old('nama'); ?>" id="nama" placeholder="contoh: uniqie" name="nama">
+                                </div>
+                                <div class="mb-3">
+                                    <?php
+                                    $oldemail = old('email');
+                                    ?>
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control <?= ($validation->hasError('email') ? 'is-invalid' : ''); ?>" id="email" name="email" placeholder="email@email.com" value="<?= ($oldemail ? $oldemail : user()->email); ?>">
+                                </div>
+                                <label for="formGroupExampleInput2" class="form-label">Pembayaran</label>
+                                <select class="form-select <?= ($validation->hasError('channel') ? 'is-invalid' : ''); ?>" id="channel" name="channel" aria-label="Default select example">
+                                    <option value="">Pilih Channel pembayaran</option>
+                                    <?php if (channel()) : ?>
+                                        <?php $channel = channel() ?>
+                                        <?php foreach ($channel as $c) : ?>
+                                            <option value="<?= $c['kode']; ?>"><?= $c['nama']; ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
+                            <button type="submit" class="btn btn-primary">Checkout</button>
+                        </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="formGroupExampleInput2" class="form-label">Email *</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="email@email.com" value="<?= user()->email; ?>">
-                    </div>
-                    <label for="formGroupExampleInput2" class="form-label">Pembayaran</label>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Bank BCA (VA)</option>
-                        <option value="1">Bank BRI (VA)</option>
-                        <option value="2">Bank BNI (VA)</option>
-                        <option value="3">Bank Mandiri (VA)</option>
-                        <option value="4">Alfamart</option>
-                        <option value="5">Alfamidi</option>
-                        <option value="6">Indomaret</option>
-                        <option value="7">OVO (Cash/Point)</option>
-                        <option value="8">QRIS</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #1062fe">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-target="#orderModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Checkout</button>
                 </div>
             </div>
-        </div>
-    </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 <?php endif; ?>
 <!-- Modal Checkout End-->
 
@@ -257,4 +268,32 @@
         </div>
     </div>
 </div>
+
+<?php if (session()->getFlashdata('error')) : ?>
+    <?php
+    $error = session()->getFlashdata('error');
+    $pesan = $error['pesan'];
+    $value = $error['value'];
+    $id = $error['id'];
+    $keterangan = implode("<br>[x] ", $value);
+    ?>
+    <script type="text/javascript">
+        var pesan = '<?= $pesan ?>';
+        var id = '<?= $id ?>';
+        var error = '<?= $keterangan ?>';
+        Swal.fire({
+            title: pesan,
+            html: '[x]' + error,
+            icon: 'error',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Coba lagi ?'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#orderModal' + id).modal('show');
+            }
+        })
+    </script>
+<?php endif; ?>
+
 <?= $this->endSection(); ?>

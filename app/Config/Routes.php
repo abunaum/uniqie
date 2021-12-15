@@ -41,6 +41,8 @@ $routes->post('authgoogle', 'Gauth::index');
 $routes->get('authuser', 'Gauth::authuser');
 $routes->get('logout', 'Gauth::logout');
 
+$routes->post('checkout', 'User::checkout');
+
 $routes->group('admin', function ($routes) {
     $routes->get('/', 'Admin::index');
 

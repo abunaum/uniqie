@@ -54,6 +54,6 @@ class BaseController extends Controller
         $this->channel = new \App\Models\Channel();
         $this->kategori = new \App\Models\Kategori();
         $this->produk = new \App\Models\Produk();
-        helper(['user', 'kategori', 'number']);
+        helper(['user', 'kategori', 'number', 'channel']);
     }
 }

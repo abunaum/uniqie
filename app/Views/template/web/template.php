@@ -32,6 +32,7 @@
 
   <!-- Template Stylesheet -->
   <link href="<?= base_url('css/style.css') ?>" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>

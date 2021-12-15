@@ -31,7 +31,7 @@
                                 <td style="text-align: center; vertical-align: middle;"><?= cekkategori($i['kategori_id']); ?></td>
                                 <td><img src="<?= base_url('images/produk/' . $i['gambar']); ?>" alt="" class="img-thumbnail" style="width: 10em;"></td>
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editModal<?= $id; ?>">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal<?= $id; ?>">
                                         Edit
                                     </button>
                                     <form action="<?= base_url('admin/produk/' . $id) ?>" method="post" class="d-inline" id="form-hapus-id<?= $id; ?>">
@@ -48,7 +48,7 @@
                 </table>
             </div>
             <center>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahModal">
                     Tambah Produk
                 </button>
             </center>
@@ -61,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="tambahModalLabel">Tambah Produk</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
             </form>
@@ -125,7 +125,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit <?= $nama; ?></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -169,7 +169,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Edit</button>
                     </div>
                 </form>

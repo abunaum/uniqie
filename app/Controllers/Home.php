@@ -25,6 +25,9 @@ class Home extends BaseController
     }
     public function logo()
     {
-        return view('web/logo');
+        $data = [
+            'validation' => \Config\Services::validation()
+        ];
+        return view('web/logo', $data);
     }
 }
