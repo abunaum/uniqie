@@ -111,7 +111,7 @@
                                 <select class="form-select <?= ($validation->hasError('channel') ? 'is-invalid' : ''); ?>" id="channel" name="channel" aria-label="Default select example">
                                     <option value="">Pilih Channel pembayaran</option>
                                     <?php if (channel()) : ?>
-                                        <?php $channel = channel() ?>
+                                        <?php $channel = channelactive() ?>
                                         <?php foreach ($channel as $c) : ?>
                                             <option value="<?= $c['kode']; ?>"><?= $c['nama']; ?></option>
                                         <?php endforeach; ?>

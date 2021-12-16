@@ -43,6 +43,10 @@ $routes->get('logout', 'Gauth::logout');
 
 $routes->post('checkout', 'User::checkout');
 
+$routes->group('user', function ($routes) {
+    $routes->post('transaksi', 'User::transaksi');
+    $routes->get('transaksi/detail/(:any)', 'User::detailtrans/$1');
+});
 $routes->group('admin', function ($routes) {
     $routes->get('/', 'Admin::index');
 

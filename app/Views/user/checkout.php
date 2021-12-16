@@ -6,7 +6,7 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="modal-content">
-                <form action="" method="post">
+                <form action="<?= base_url('user/transaksi') ;?>" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="orderModalToggleLabel2">Konfirmasi pesanan anda</h5>
                     </div>
@@ -14,18 +14,22 @@
                         <label for="formGroupExampleInput" class="form-label">Nama Logo</label>
                         <div class="alert alert-primary" role="alert">
                             <?= $nama; ?>
+                            <input type="hidden" name="nama" value="<?= $nama; ?>" />
                         </div>
                         <label for="formGroupExampleInput" class="form-label">Email</label>
                         <div class="alert alert-primary" role="alert">
                             <?= $email; ?>
+                            <input type="hidden" name="email" value="<?= $email; ?>" />
                         </div>
                         <label for="formGroupExampleInput" class="form-label">Nama Produk</label>
                         <div class="alert alert-primary" role="alert">
+                            <input type="hidden" name="produk" value="<?= $produk['id']; ?>" />
                             <?= $produk['nama']; ?>
                         </div>
                         <label for="formGroupExampleInput" class="form-label">Pembayaran</label>
                         <div class="alert alert-primary" role="alert">
                             <?= $channel['nama']; ?>
+                            <input type="hidden" name="channel" value="<?= $channel['kode']; ?>" />
                         </div>
                         <label for="formGroupExampleInput" class="form-label">Total bayar</label>
                         <div class="alert alert-primary" role="alert">

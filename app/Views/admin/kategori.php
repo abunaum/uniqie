@@ -26,7 +26,7 @@
                                 <td><?= $nomor++ ?></td>
                                 <td><?= $nama ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editModal<?= $id; ?>">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal<?= $id; ?>">
                                         Edit
                                     </button>
                                     <form action="<?= base_url('admin/kategori/' . $id) ?>" method="post" class="d-inline" id="form-hapus-id<?= $id; ?>">
@@ -43,7 +43,7 @@
                 </table>
             </div>
             <center>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahModal">
                     Tambah Kategori
                 </button>
             </center>
