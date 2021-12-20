@@ -14,7 +14,7 @@ class Transaksi extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user', 'produk', 'nama', 'email', 'channel', 'status', 'reference', 'merchant_ref'];
+    protected $allowedFields    = ['user', 'produk', 'nama', 'email', 'channel', 'status', 'reference', 'merchant_ref', 'info'];
 
     // Dates
     protected $useTimestamps = true;

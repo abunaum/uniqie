@@ -1,5 +1,5 @@
 <?php
-function createtransaction($produk, $channel, $email)
+function createtransaction($produk, $channel, $email, $nomor)
 {
     $payment = new \App\Models\Payment();
     $getpayment = $payment->asObject()->first();
@@ -19,7 +19,7 @@ function createtransaction($produk, $channel, $email)
         'amount'         => $amount,
         'customer_name'  => user()->name,
         'customer_email' => $email,
-        'customer_phone' => 'CS - 085155118423',
+        'customer_phone' => $nomor,
         'order_items'    => [
             [
                 'sku'         => $getproduk->nama,
@@ -69,7 +69,7 @@ function cektransaction($ref)
 
     curl_setopt_array($curl, [
         CURLOPT_FRESH_CONNECT  => true,
-        CURLOPT_URL            => 'https://tripay.co.id/'.$getpayment->jenis.'/transaction/detail?' . http_build_query($payload),
+        CURLOPT_URL            => 'https://tripay.co.id/' . $getpayment->jenis . '/transaction/detail?' . http_build_query($payload),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HEADER         => false,
         CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
@@ -83,4 +83,17 @@ function cektransaction($ref)
     $cekpayment = json_decode($response, true);
     $cekpayment = json_encode($cekpayment);
     return $cekpayment;
+}
+
+function cekchannel($kode)
+{
+    if ($kode == 'MYBVA' or $kode == 'PERMATAVA' or $kode == 'BNIVA' or $kode == 'BRIVA' or $kode == 'MANDIRIVA' or $kode == 'SMSVA' or $kode == 'MUAMALATVA' or $kode == 'CIMBVA' or $kode == 'SAMPOERNAVA' or $kode == 'BRIVAOP' or $kode == 'CIMBVAOP' or $kode == 'DANAMONOP' or $kode == 'BNIVAOP' or $kode == 'HANAVAOP') {
+        return 'bank';
+    } elseif ($kode == 'ALFAMART' or $kode == 'INDOMARET' or $kode == 'ALFAMIDI') {
+        return 'toko';
+    } elseif ($kode == 'OVO') {
+        return 'ovo';
+    } else {
+        return 'qris';
+    }
 }

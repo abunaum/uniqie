@@ -98,7 +98,7 @@
               <div class="card-body">
                 <center>
                   <hr>
-                  <a href="">
+                  <a href="<?= base_url('user/transaksi'); ?>">
                     <button class="btn btn-primary btn-lg rounded-pill">Transaksi</button>
                   </a>
                   <a href="<?= base_url('logout'); ?>">

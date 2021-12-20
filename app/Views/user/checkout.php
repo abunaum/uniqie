@@ -6,7 +6,7 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="modal-content">
-                <form action="<?= base_url('user/transaksi') ;?>" method="post">
+                <form action="<?= base_url('user/transaksi'); ?>" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="orderModalToggleLabel2">Konfirmasi pesanan anda</h5>
                     </div>
@@ -31,6 +31,13 @@
                             <?= $channel['nama']; ?>
                             <input type="hidden" name="channel" value="<?= $channel['kode']; ?>" />
                         </div>
+                        <?php if ($channel['kode'] == 'OVO') : ?>
+                            <label for="formGroupExampleInput" class="form-label">Nomor OVO</label>
+                            <div class="alert alert-primary" role="alert">
+                                <?= $nomor; ?>
+                                <input type="hidden" name="ovo" value="<?= $nomor; ?>" />
+                            </div>
+                        <?php endif; ?>
                         <label for="formGroupExampleInput" class="form-label">Total bayar</label>
                         <div class="alert alert-primary" role="alert">
                             <?= number_to_currency($produk['harga'], 'IDR'); ?>
