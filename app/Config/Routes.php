@@ -60,12 +60,12 @@ $routes->group('admin', function ($routes) {
     $routes->post('edit_kategori/(:num)', 'AdminProses::edit_kategori/$1');
     $routes->delete('kategori/(:num)', 'AdminProses::hapus_kategori/$1');
 
-    $routes->post('uninstall', 'AdminProses::uninstall');
-
     $routes->get('produk', 'Admin::produk');
     $routes->post('tambah_produk', 'AdminProses::tambah_produk');
     $routes->post('edit_produk/(:num)', 'AdminProses::edit_produk/$1');
     $routes->delete('produk/(:num)', 'AdminProses::hapus_produk/$1');
+
+    $routes->get('transaksi', 'Admin::transaksi');
 });
 
 $routes->group('api', function ($routes) {
@@ -73,6 +73,7 @@ $routes->group('api', function ($routes) {
     $routes->post('syncchannel', 'Api::syncchannel');
     $routes->post('onoffchannel', 'Api::onoffchannel');
 });
+
 
 /*
  * --------------------------------------------------------------------

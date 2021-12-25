@@ -65,4 +65,33 @@ class Admin extends BaseController
         ];
         return view('admin/produk', $data);
     }
+
+    public function transaksi()
+    {
+        $cp = $this->request->getVar('page_transaksi') ? $this->request->getVar('page_transaksi') : 1;
+        $jmldata = 10;
+        $transaksi = new \App\Models\Transaksi();
+        $trx = $transaksi->findAll();
+        $tottrx = count($trx);
+
+        if (!$trx) {
+            $data = [
+                'judul' => 'Transaksi'
+            ];
+            $tampil = 'tampilan_kosong';
+        } elseif ($jmldata * ($cp - 1) >= $tottrx) {
+            return redirect()->to(base_url('admin/transaksi'));
+        } else {
+            $data = [
+                'judul' => 'Transaksi',
+                'transaksi' => $transaksi->paginate($jmldata, 'transaksi'),
+                'pager' => $transaksi->pager,
+                'jmldata' => $jmldata,
+                'cp' => $cp,
+                'validation' => \Config\Services::validation()
+            ];
+            $tampil = 'admin/transaksi';
+        }
+        return view($tampil, $data);
+    }
 }

@@ -39,13 +39,10 @@ class Api extends BaseController
 
     public function syncchannel()
     {
-        $api = $this->payment->where('id', 1)->first();
-        $apikey = $api['apikey'];
-        $jenis = $api['jenis'];
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://tripay.co.id/$jenis/merchant/payment-channel",
+            CURLOPT_URL => 'https://tripay.co.id/developer?tab=channels',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -53,20 +50,24 @@ class Api extends BaseController
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer $apikey"
-            ),
         ));
 
-        $hasil = curl_exec($curl);
-
-        $test = json_decode($hasil, true);
+        $response = curl_exec($curl);
 
         curl_close($curl);
-        $arr = array();
-
-        foreach ($test['data'] as $r) {
-            $arr[] = [$r['code'], $r['name']];
+        $data = [];
+        $getkode = explode('<td><b>', $response);
+        for ($i = 1; $i < count($getkode); $i++) {
+            $endkode = explode('</b></td>', $getkode[$i]);
+            $kode = $endkode[0];
+            $hs1 = explode('<b>', $endkode[1]);
+            $hs2 = explode('</b>', $hs1[1]);
+            $nama = $hs2[0];
+            $dt = array(
+                'kode' => $kode,
+                'nama' => $nama
+            );
+            array_push($data, $dt);
         }
 
         $this->db->transStart();
@@ -75,9 +76,9 @@ class Api extends BaseController
             $channel = $this->db->table('channel');
             $channel->truncate();
         }
-        foreach ($arr as $a) {
-            $code = $a[0];
-            $nama = $a[1];
+        foreach ($data as $a) {
+            $code = $a['kode'];
+            $nama = $a['nama'];
             $channel = new $this->channel;
             $channel->save([
                 'kode' => $code,

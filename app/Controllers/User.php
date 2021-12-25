@@ -201,7 +201,8 @@ class User extends BaseController
                 'reference' => $referensi,
                 'merchant_ref' => $merchant_ref,
                 'info' => $nomor,
-                'status' => $payment['data']['status']
+                'status' => $payment['data']['status'],
+                'selesai' => 'no'
             ]);
             return redirect()->to(base_url("user/transaksi/detail/$merchant_ref"));
         } else {

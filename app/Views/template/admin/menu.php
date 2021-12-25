@@ -28,19 +28,10 @@
 </li>
 <li class="has-sub">
     <a class="js-arrow" href="#">
-        <i class="fas fa-fw fa-users"></i>User</a>
+        <i class="fas fa-fw fa-users"></i>Transaksi</a>
     <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
         <li>
-            <a href="<?= base_url('admin/user'); ?>">Daftar User</a>
-        </li>
-    </ul>
-</li>
-<li class="has-sub">
-    <a class="js-arrow" href="#">
-        <i class="fas fa-fw fa-store"></i>Toko</a>
-    <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
-        <li>
-            <a href="<?= base_url('admin/toko/pengajuan'); ?>">Pengajuan Toko</a>
+            <a href="<?= base_url('admin/transaksi'); ?>">Daftar transaksi</a>
         </li>
     </ul>
 </li>

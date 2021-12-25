@@ -19,6 +19,7 @@ class Transaksi extends Migration
             'channel'        => ['type' => 'varchar', 'constraint' => 255],
             'info'           => ['type' => 'varchar', 'constraint' => 255],
             'status'         => ['type' => 'varchar', 'constraint' => 255],
+            'selesai'         => ['type' => 'varchar', 'constraint' => 255],
             'created_at'     => ['type' => 'datetime', 'null' => true],
             'updated_at'     => ['type' => 'datetime', 'null' => true],
             'deleted_at'     => ['type' => 'datetime', 'null' => true],

@@ -19,3 +19,10 @@ function cekkategori($id)
     $getkategori = $kategori->where('id', $id)->first();
     return $getkategori['nama'];
 }
+
+function ceknamaproduk($id)
+{
+    $produk = new \App\Models\Produk();
+    $getproduk = $produk->where('id', $id)->first();
+    return $getproduk['nama'];
+}

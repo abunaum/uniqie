@@ -53,6 +53,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    <center>
+                        <?php if ($type_channel == 'qris') : ?>
+                            <div data-bs-toggle="modal" data-bs-target="#qrModal">
+                                <img src="<?= $payment['qr_url']; ?>" alt="QRIS">
+                            </div>
+                        <?php endif; ?>
+                    </center>
                     <?php if ($payment['status'] == 'UNPAID') : ?>
                         <div class="alert alert-warning" role="alert">
                             Pastikan anda melakukan pembayaran sebelum melewati batas pembayaran dan dengan nominal yang tepat.
@@ -101,5 +108,26 @@
         </div>
     </div>
 </div>
-
+<?php if ($type_channel == 'qris') : ?>
+    <div class="modal fade" id="qrModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(29, 40, 51, 0.8);">
+                <div class="modal-header border-0">
+                    <button type="button" class="text-white btn-primary btn bg-blue btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center row">
+                    <div class="card" style="max-width: 50em;">
+                        <div class="card-header">
+                            <center>
+                                <img src="<?= $payment['qr_url']; ?>" alt="QRIS" style="width: 20em;">
+                            </center>
+                        </div>
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 <?= $this->endSection(); ?>
