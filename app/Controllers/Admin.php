@@ -35,12 +35,27 @@ class Admin extends BaseController
 
     public function channel()
     {
+        $cp = $this->request->getVar('page_channel') ? $this->request->getVar('page_channel') : 1;
+
+        if (!preg_match('/^\d+$/', $cp)) {
+            return redirect()->to(base_url('admin/channel'));
+        }
         $payment = $this->payment->where('id', 1)->first();
-        $channel = $this->channel->findAll();
+        $channel = $this->channel;
+        $jmldata = 10;
+        $startno = ($jmldata * $cp) - $jmldata;
+        $chn = $channel->findAll();
+        $totchn = count($chn);
+
+        if ($startno >= $totchn) {
+            return redirect()->to(base_url('admin/channel'));
+        }
         $data = [
             'judul' => 'Channel Pembayaran',
             'payment' => $payment,
-            'channel' => $channel,
+            'channel' => $channel->paginate($jmldata, 'channel'),
+            'pager' => $channel->pager,
+            'startno' => $startno,
             'validation' => \Config\Services::validation()
         ];
         return view('admin/channel', $data);
@@ -69,7 +84,11 @@ class Admin extends BaseController
     public function transaksi()
     {
         $cp = $this->request->getVar('page_transaksi') ? $this->request->getVar('page_transaksi') : 1;
+        if (!preg_match('/^\d+$/', $cp)) {
+            return redirect()->to(base_url('admin/transaksi'));
+        }
         $jmldata = 10;
+        $startno = ($jmldata * $cp) - $jmldata;
         $transaksi = new \App\Models\Transaksi();
         $trx = $transaksi->findAll();
         $tottrx = count($trx);
@@ -86,12 +105,41 @@ class Admin extends BaseController
                 'judul' => 'Transaksi',
                 'transaksi' => $transaksi->paginate($jmldata, 'transaksi'),
                 'pager' => $transaksi->pager,
-                'jmldata' => $jmldata,
-                'cp' => $cp,
+                'startno' => $startno,
                 'validation' => \Config\Services::validation()
             ];
             $tampil = 'admin/transaksi';
         }
         return view($tampil, $data);
+    }
+
+    public function transaksi_detail($ref = 'a')
+    {
+        $transaksi = new \App\Models\Transaksi();
+        $transaksi->join('produk', 'produk.id = transaksi.produk', 'LEFT');
+        $transaksi->join('channel', 'channel.kode = transaksi.channel', 'LEFT');
+        $transaksi->join('users', 'users.id = transaksi.user', 'LEFT');
+        $transaksi->select('produk.nama as nama_produk');
+        $transaksi->select('produk.gambar as gambar');
+        $transaksi->select('produk.harga as harga');
+        $transaksi->select('users.name as user_name');
+        $transaksi->select('transaksi.id');
+        $transaksi->select('transaksi.email');
+        $transaksi->select('transaksi.nama');
+        $transaksi->select('transaksi.reference');
+        $transaksi->select('transaksi.merchant_ref');
+        $transaksi->select('transaksi.channel');
+        $transaksi->select('transaksi.status');
+        $transaksi->where('merchant_ref', $ref);
+        $transaksi = $transaksi->first();
+        if (!$transaksi) {
+            return redirect()->to(base_url('admin/transaksi'));
+        }
+        $data = [
+            'judul' => 'Transaksi - ' . $transaksi['merchant_ref'],
+            'transaksi' => $transaksi
+        ];
+        return view('admin/transaksi_detail', $data);
+        dd($transaksi);
     }
 }

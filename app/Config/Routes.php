@@ -66,12 +66,17 @@ $routes->group('admin', function ($routes) {
     $routes->delete('produk/(:num)', 'AdminProses::hapus_produk/$1');
 
     $routes->get('transaksi', 'Admin::transaksi');
+    $routes->get('transaksi/(:any)', 'Admin::transaksi_detail/$1');
 });
 
 $routes->group('api', function ($routes) {
     $routes->post('cekapipayment', 'Api::api');
     $routes->post('syncchannel', 'Api::syncchannel');
     $routes->post('onoffchannel', 'Api::onoffchannel');
+});
+$routes->group('test', function ($routes) {
+    $routes->post('callback', 'Callback::index');
+    $routes->get('tester', 'Callback::tester');
 });
 
 

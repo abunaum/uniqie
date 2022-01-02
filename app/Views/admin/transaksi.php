@@ -18,15 +18,17 @@
                     </thead>
                     <tbody>
                         <?php
-                        $nomor = 1 + ($jmldata * ($cp - 1)) ?>
+                        $nomor = 1 + $startno;
+                        ?>
                         <?php foreach ($transaksi as $i) : ?>
                             <tr>
                                 <?php
                                 $id = $i['id'];
+                                $ref = $i['merchant_ref'];
                                 ?>
                                 <td style="text-align: center; vertical-align: middle;"><?= $nomor++ ?></td>
                                 <td><?= $i['reference']; ?></td>
-                                <td><?= $i['merchant_ref']; ?></td>
+                                <td><?= $ref; ?></td>
                                 <td><?= ceknamaproduk($i['produk']); ?></td>
                                 <td>
                                     <?php
@@ -42,7 +44,7 @@
                                     ?>
                                 </td>
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <a href="">
+                                    <a href="<?= base_url("admin/transaksi/$ref"); ?>">
                                         <button class="btn btn-success">Detail</button>
                                     </a>
                                 </td>

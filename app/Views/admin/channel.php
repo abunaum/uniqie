@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                             <?php
-                            $nomor = 1;
+                            $nomor = 1 + $startno;
                             ?>
                             <?php foreach ($channel as $i) : ?>
                                 <tr>
@@ -60,9 +60,9 @@
                                     $status = $i['status'];
                                     $id = $i['id'];
                                     ?>
-                                    <td><?= $nomor++ ?></td>
-                                    <td><?= $kode ?></td>
-                                    <td><?= $nama ?></td>
+                                    <td><?= $nomor++; ?></td>
+                                    <td><?= $kode; ?></td>
+                                    <td><?= $nama; ?></td>
                                     <td>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" <?= ($status == 'aktif' ? 'checked' : ''); ?> role="switch" id="status<?= $id; ?>" onclick="onoff('<?= $id; ?>')">
@@ -72,16 +72,36 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <br>
+                    <div class="d-flex justify-content-center">
+                        <?= $pager->links('channel', 'halaman'); ?>
+                    </div>
                 </div>
                 <center>
                     <hr>
-                    <button class="btn btn-success" onclick="sinkron()">Sinkron lagi</button>
+                    <button class="btn btn-success" onclick="tsinkron()">Reset & Sinkron lagi</button>
                 </center>
             <?php endif; ?>
         </div>
     </div>
 </div>
 <script>
+    function tsinkron() {
+        Swal.fire({
+            title: 'Yakin sinkron ulang?',
+            text: "Anda akan mereset dan mensinkron ulang channel",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sinkron Ulang'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sinkron();
+            }
+        })
+    }
+
     function sinkron() {
         Swal.fire({
             title: 'Channel',
