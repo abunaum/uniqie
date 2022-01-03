@@ -139,26 +139,26 @@ class Callback extends BaseController
 
     public function tester()
     {
-        $payment = $this->payment->where('id', 1)->first();
-        $privateKey = $payment['apiprivatekey'];
+        // $payment = $this->payment->where('id', 1)->first();
+        // $privateKey = $payment['apiprivatekey'];
 
-        // ambil data json callback notifikasi
-        $data = '{
-            "reference": "T15471462923DRXKY",
-            "merchant_ref": "f60426e52c0861af551a",
-            "payment_method": "Alfamart",
-            "payment_method_code": "ALFAMART",
-            "total_amount": 20000,
-            "fee_merchant": 200,
-            "fee_customer": 0,
-            "amount_received": 19800,
-            "is_closed_payment": 1,
-            "status": "PAID",
-            "paid_at": 1608133017,
-            "note": null
-        }';
-        $json = $data;
-        $signature = hash_hmac('sha256', $json, $privateKey);
-        echo $signature;
+        // // ambil data json callback notifikasi
+        // $data = '{
+        //     "reference": "T15471462923DRXKY",
+        //     "merchant_ref": "f60426e52c0861af551a",
+        //     "payment_method": "Alfamart",
+        //     "payment_method_code": "ALFAMART",
+        //     "total_amount": 20000,
+        //     "fee_merchant": 200,
+        //     "fee_customer": 0,
+        //     "amount_received": 19800,
+        //     "is_closed_payment": 1,
+        //     "status": "PAID",
+        //     "paid_at": 1608133017,
+        //     "note": null
+        // }';
+        // $json = $data;
+        // $signature = hash_hmac('sha256', $json, $privateKey);
+        // echo $signature;
     }
 }

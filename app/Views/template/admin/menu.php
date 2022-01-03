@@ -28,10 +28,20 @@
 </li>
 <li class="has-sub">
     <a class="js-arrow" href="#">
-        <i class="fas fa-fw fa-users"></i>Transaksi</a>
+        <i class="fas fa-fw fa-exchange-alt"></i>Transaksi</a>
     <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
         <li>
-            <a href="<?= base_url('admin/transaksi'); ?>">Daftar transaksi</a>
+            <a href="<?= base_url('admin/transaksi-berlangsung'); ?>">Transaksi Berlangsung</a>
+            <a href="<?= base_url('admin/transaksi'); ?>">Semua Transaksi</a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a class="js-arrow" href="#">
+        <i class="fas fa-fw fa-mail-bulk"></i>SMTP Setting</a>
+    <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
+        <li>
+            <a href="<?= base_url('admin/smtp'); ?>">List SMTP</a>
         </li>
     </ul>
 </li>

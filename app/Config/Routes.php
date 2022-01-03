@@ -65,8 +65,14 @@ $routes->group('admin', function ($routes) {
     $routes->post('edit_produk/(:num)', 'AdminProses::edit_produk/$1');
     $routes->delete('produk/(:num)', 'AdminProses::hapus_produk/$1');
 
+    $routes->get('transaksi-berlangsung', 'Admin::transaksi_open');
     $routes->get('transaksi', 'Admin::transaksi');
     $routes->get('transaksi/(:any)', 'Admin::transaksi_detail/$1');
+
+    $routes->get('smtp', 'Admin::smtp');
+    $routes->post('tambah_smtp', 'AdminProses::tambah_smtp');
+    $routes->post('edit_smtp/(:num)', 'AdminProses::edit_smtp/$1');
+    $routes->delete('smtp/(:num)', 'AdminProses::hapus_smtp/$1');
 });
 
 $routes->group('api', function ($routes) {

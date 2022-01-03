@@ -53,6 +53,9 @@
                     </table>
                     <br>
                     <hr>
+                    <?php if ($transaksi['status'] == 'PAID' && $transaksi['selesai'] == 'no') : ?>
+                        <button class="btn btn-success">Prosess</button>
+                    <?php endif; ?>
                 </div>
             </center>
         </div>

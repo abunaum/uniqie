@@ -367,4 +367,147 @@ class AdminProses extends BaseController
         ]);
         return redirect()->to(base_url('admin/produk'));
     }
+
+    public function tambah_smtp()
+    {
+        helper('email');
+        $validasi = \Config\Services::validation();
+        $host = $this->request->getVar('host');
+        $port = $this->request->getVar('port');
+        $user = $this->request->getVar('user');
+        $password = $this->request->getVar('password');
+        if (!$this->validate(
+            [
+                'host' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Host harus di isi.'
+                    ]
+                ],
+                'port' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Port harus di isi.',
+                        'numeric' => 'Port harus angka.'
+                    ]
+                ],
+                'user' => [
+                    'rules' => 'required|valid_email',
+                    'errors' => [
+                        'required' => 'user harus di isi.',
+                        'valid_email' => 'User harus berupa email.'
+                    ]
+                ]
+            ]
+        )) {
+            session()->setFlashdata('error', [
+                'pesan' => 'Gagal memverifikasi SMTP.',
+                'type' => 'tambah',
+                'value' => $validasi->getErrors()
+            ]);
+            return redirect()->to(base_url('admin/smtp'))->withInput();
+        } else {
+            $testemail = testemail($host, $user, $password, $port);
+            if ($testemail == 'success') {
+                $smtp = new \App\Models\Smtp();
+                $smtp->save([
+                    'host' => $host,
+                    'port' => $port,
+                    'user' => $user,
+                    'password' => $password
+                ]);
+                session()->setFlashdata('sukses', [
+                    'pesan' => 'Mantap.',
+                    'value' => 'Berhasil menambah SMTP'
+                ]);
+                return redirect()->to(base_url('admin/smtp'));
+            } else {
+                session()->setFlashdata('smtperr', [
+                    'pesan' => 'Gagal terhubung ke SMTP.',
+                    'type' => 'tambah',
+                    'value' => 'Pastikan host, port, user, dan password SMTP sudah benar'
+                ]);
+                return redirect()->to(base_url('admin/smtp'))->withInput();
+            }
+        }
+    }
+
+    public function edit_smtp($id = 0)
+    {
+        helper('email');
+        $validasi = \Config\Services::validation();
+        $host = $this->request->getVar('host');
+        $port = $this->request->getVar('port');
+        $user = $this->request->getVar('user');
+        $password = $this->request->getVar('password');
+        if (!$this->validate(
+            [
+                'host' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Host harus di isi.'
+                    ]
+                ],
+                'port' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Port harus di isi.',
+                        'numeric' => 'Port harus angka.'
+                    ]
+                ],
+                'user' => [
+                    'rules' => 'required|valid_email',
+                    'errors' => [
+                        'required' => 'user harus di isi.',
+                        'valid_email' => 'User harus berupa email.'
+                    ]
+                ]
+            ]
+        )) {
+            session()->setFlashdata('error', [
+                'pesan' => 'Gagal memverifikasi SMTP.',
+                'type' => 'edit',
+                'id' => $id,
+                'value' => $validasi->getErrors()
+            ]);
+            return redirect()->to(base_url('admin/smtp'))->withInput();
+        } else {
+            $testemail = testemail($host, $user, $password, $port);
+            if ($testemail == 'success') {
+                $smtp = new \App\Models\Smtp();
+                $smtp->save([
+                    'id' => $id,
+                    'host' => $host,
+                    'port' => $port,
+                    'user' => $user,
+                    'password' => $password
+                ]);
+                session()->setFlashdata('sukses', [
+                    'pesan' => 'Mantap.',
+                    'value' => 'Berhasil mengubah SMTP'
+                ]);
+                return redirect()->to(base_url('admin/smtp'));
+            } else {
+                session()->setFlashdata('smtperr', [
+                    'pesan' => 'Gagal terhubung ke SMTP.',
+                    'type' => 'edit',
+                    'id' => $id,
+                    'value' => 'Pastikan host, port, user, dan password SMTP sudah benar'
+                ]);
+                return redirect()->to(base_url('admin/smtp'))->withInput();
+            }
+        }
+    }
+
+    public function hapus_smtp($id = 0)
+    {
+        $smtp = new \App\Models\Smtp();
+        $getsmtp = $smtp->where('id', $id)->first();
+        $smtp->where('id', $id)->delete();
+        session()->setFlashdata('sukses', [
+            'pesan' => 'Mantap.',
+            'value' => 'Berhasil menghapus ' . $getsmtp['user']
+        ]);
+        return redirect()->to(base_url('admin/smtp'));
+    }
 }

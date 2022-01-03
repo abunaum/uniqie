@@ -81,6 +81,40 @@ class Admin extends BaseController
         return view('admin/produk', $data);
     }
 
+    public function transaksi_open()
+    {
+        $cp = $this->request->getVar('page_transaksi') ? $this->request->getVar('page_transaksi') : 1;
+        if (!preg_match('/^\d+$/', $cp)) {
+            return redirect()->to(base_url('admin/transaksi'));
+        }
+        $jmldata = 10;
+        $startno = ($jmldata * $cp) - $jmldata;
+        $transaksi = new \App\Models\Transaksi();
+        $transaksi->where('status', 'PAID');
+        $transaksi->where('selesai', 'no');
+        $trx = $transaksi->findAll();
+        $tottrx = count($trx);
+
+        if (!$trx) {
+            $data = [
+                'judul' => 'Transaksi Berlangsung'
+            ];
+            $tampil = 'tampilan_kosong';
+        } elseif ($jmldata * ($cp - 1) >= $tottrx) {
+            return redirect()->to(base_url('admin/transaksi'));
+        } else {
+            $data = [
+                'judul' => 'Transaksi Berlangsung',
+                'transaksi' => $transaksi->paginate($jmldata, 'transaksi'),
+                'pager' => $transaksi->pager,
+                'startno' => $startno,
+                'validation' => \Config\Services::validation()
+            ];
+            $tampil = 'admin/transaksi';
+        }
+        return view($tampil, $data);
+    }
+
     public function transaksi()
     {
         $cp = $this->request->getVar('page_transaksi') ? $this->request->getVar('page_transaksi') : 1;
@@ -130,6 +164,7 @@ class Admin extends BaseController
         $transaksi->select('transaksi.merchant_ref');
         $transaksi->select('transaksi.channel');
         $transaksi->select('transaksi.status');
+        $transaksi->select('transaksi.selesai');
         $transaksi->where('merchant_ref', $ref);
         $transaksi = $transaksi->first();
         if (!$transaksi) {
@@ -140,6 +175,17 @@ class Admin extends BaseController
             'transaksi' => $transaksi
         ];
         return view('admin/transaksi_detail', $data);
-        dd($transaksi);
+    }
+
+    public function smtp()
+    {
+        $smtp = new \App\Models\Smtp();
+        $smtp = $smtp->findAll();
+        $data = [
+            'judul' => 'SMTP',
+            'smtp' => $smtp,
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/smtp', $data);
     }
 }
