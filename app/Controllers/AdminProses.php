@@ -425,7 +425,7 @@ class AdminProses extends BaseController
                 session()->setFlashdata('smtperr', [
                     'pesan' => 'Gagal terhubung ke SMTP.',
                     'type' => 'tambah',
-                    'value' => 'Pastikan host, port, user, dan password SMTP sudah benar'
+                    'value' => $testemail
                 ]);
                 return redirect()->to(base_url('admin/smtp'))->withInput();
             }
@@ -492,7 +492,7 @@ class AdminProses extends BaseController
                     'pesan' => 'Gagal terhubung ke SMTP.',
                     'type' => 'edit',
                     'id' => $id,
-                    'value' => 'Pastikan host, port, user, dan password SMTP sudah benar'
+                    'value' => $testemail
                 ]);
                 return redirect()->to(base_url('admin/smtp'))->withInput();
             }
@@ -509,5 +509,52 @@ class AdminProses extends BaseController
             'value' => 'Berhasil menghapus ' . $getsmtp['user']
         ]);
         return redirect()->to(base_url('admin/smtp'));
+    }
+
+    public function telegram_req()
+    {
+        $teleid = $this->request->getVar('teleid');
+        $validasi = \Config\Services::validation();
+        if (!$this->validate(
+            [
+                'teleid' => [
+                    'rules' => 'required|numeric',
+                    'errors' => [
+                        'required' => 'ID Telegram harus di isi.',
+                        'numeric' => 'ID Telegram harus angka.'
+                    ]
+                ]
+            ]
+        )) {
+            session()->setFlashdata('error', [
+                'pesan' => 'Gagal memverifikasi Telegram.',
+                'value' => $validasi->getErrors()
+            ]);
+            return redirect()->to(base_url('admin/telegram'))->withInput();
+        }
+        $telegram = new \App\Models\Telegram();
+        $cektelegram = $telegram->where('userid', user()->id)->first();
+        $code = substr(str_shuffle("0123456789"), 0, 6);
+        if (!$cektelegram) {
+            $telegram->save([
+                'userid' => user()->id,
+                'teleid' => $teleid,
+                'code' => $code,
+                'status' => 'belum'
+            ]);
+        } else {
+            $telegram->save([
+                'id' => $cektelegram['id'],
+                'userid' => user()->id,
+                'teleid' => $teleid,
+                'code' => $code,
+                'status' => 'belum'
+            ]);
+        }
+        session()->setFlashdata('sukses', [
+            'pesan' => "ID Telegram $teleid tersimpan.",
+            'value' => 'Silahkan meverifikasi Telegram anda'
+        ]);
+        return redirect()->to(base_url('admin/telegram'));
     }
 }

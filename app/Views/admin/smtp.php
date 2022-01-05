@@ -226,10 +226,10 @@
         var pesan = '<?= $pesan; ?>';
         var tipe = '<?= $type; ?>';
         var id = '<?= $edit_id; ?>';
-        var error = '<?= $value; ?>';
+        var isi = '<?= $value; ?>';
         Swal.fire({
             title: pesan,
-            html: error,
+            html: '<small>' + isi + '</small>',
             icon: 'error',
             showCancelButton: false,
             confirmButtonColor: '#3085d6',

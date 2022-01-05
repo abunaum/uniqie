@@ -188,4 +188,16 @@ class Admin extends BaseController
         ];
         return view('admin/smtp', $data);
     }
+
+    public function telegram()
+    {
+        $telegram = new \App\Models\Telegram();
+        $telegram = $telegram->where('userid', user()->id)->first();
+        $data = [
+            'judul' => 'Telegram',
+            'telegram' => $telegram,
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/telegram', $data);
+    }
 }

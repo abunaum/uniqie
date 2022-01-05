@@ -139,6 +139,54 @@ class Callback extends BaseController
 
     public function tester()
     {
+        $id = 2;
+        $smtp = new \App\Models\Smtp();
+        $smtp = $smtp->where('id', $id)->first();
+        $tujuan = 'andialfa11@gmail.com';
+        $subject = 'testing 1';
+        $pesan = 'testing pesan';
+
+        $email = \Config\Services::email();
+
+        $config['SMTPHost']  = $smtp['host'];
+        $config['SMTPUser']  = $smtp['user'];
+        $config['SMTPPass']  = $smtp['password'];
+        $config['SMTPPort']  = $smtp['port'];
+        $config['SMTPCrypto']  = 'ssl';
+        $config['protocol'] = 'smtp';
+        $config['mailPath'] = '/usr/sbin/sendmail';
+        $config['charset']  = 'iso-8859-1';
+        $config['wordWrap'] = true;
+
+        $email->initialize($config);
+
+        $email->setFrom($smtp['user'], $_SERVER['HTTP_HOST']);
+        $email->setTo($tujuan);
+
+        $email->setSubject($subject);
+        $email->setMessage($pesan);
+
+        $kirim = $email->send();
+        $debug = $email->printDebugger(['headers']);
+        $debug = strip_tags($debug);
+        // $debug = str_replace("<pre>", "", $debug);
+        // $debug = str_replace("</pre>", "<br>", $debug);
+        // $debug = str_replace("\n\n", "<br>", $debug);
+        $debug = str_replace("\n", "<br>", $debug);
+        // $debug = str_replace("<br />", "<br>", $debug);
+        $debug = str_replace("<br><br>", "<br>", $debug);
+        // $keterangan = implode("<br>", $debug);
+        // $res = explode("<br />", $debug);
+        // dd($res);
+        echo $debug;
+        die;
+        if (!$kirim) {
+            $debug = $email->printDebugger(['headers']);
+            $res = explode("<br />", $debug);
+            echo $res[0];
+        } else {
+            echo 'sukses';
+        }
         // $payment = $this->payment->where('id', 1)->first();
         // $privateKey = $payment['apiprivatekey'];
 

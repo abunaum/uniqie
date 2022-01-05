@@ -73,6 +73,9 @@ $routes->group('admin', function ($routes) {
     $routes->post('tambah_smtp', 'AdminProses::tambah_smtp');
     $routes->post('edit_smtp/(:num)', 'AdminProses::edit_smtp/$1');
     $routes->delete('smtp/(:num)', 'AdminProses::hapus_smtp/$1');
+
+    $routes->get('telegram', 'Admin::telegram');
+    $routes->post('telegram_req', 'AdminProses::telegram_req');
 });
 
 $routes->group('api', function ($routes) {

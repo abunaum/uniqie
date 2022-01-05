@@ -38,10 +38,13 @@
 </li>
 <li class="has-sub">
     <a class="js-arrow" href="#">
-        <i class="fas fa-fw fa-mail-bulk"></i>SMTP Setting</a>
+        <i class="fas fa-fw fa-mail-bulk"></i>Notifikasi</a>
     <ul class="list-unstyled navbar-mobile-sub__list js-sub-list">
         <li>
-            <a href="<?= base_url('admin/smtp'); ?>">List SMTP</a>
+            <a href="<?= base_url('admin/smtp'); ?>">SMTP</a>
+        </li>
+        <li>
+            <a href="<?= base_url('admin/telegram'); ?>">Telegram</a>
         </li>
     </ul>
 </li>
